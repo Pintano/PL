@@ -1570,8 +1570,8 @@ yyreduce:
   case 40: /* lista_id: IDENTIFICADOR SEPARADOR lista_id  */
 #line 176 "programa.y"
                                      {
-        if(!existSymbol((yyvsp[-2].cadena))){
-            (yyvsp[0].listaId).keys[(yyvsp[0].listaId).sig] = insertSymbol((yyvsp[-2].cadena));
+        if(!existSymbolVarConst((yyvsp[-2].cadena))){
+            (yyvsp[0].listaId).keys[(yyvsp[0].listaId).sig] = insertSymbolVar((yyvsp[-2].cadena));
             (yyvsp[0].listaId).sig++;
         }
         else{
@@ -1585,8 +1585,8 @@ yyreduce:
   case 41: /* lista_id: IDENTIFICADOR_BOOLEANO SEPARADOR lista_id  */
 #line 186 "programa.y"
                                                 {
-        if(!existSymbol((yyvsp[-2].cadena))){
-            (yyvsp[0].listaId).keys[(yyvsp[0].listaId).sig] = insertSymbol((yyvsp[-2].cadena));
+        if(!existSymbolVarConst((yyvsp[-2].cadena))){
+            (yyvsp[0].listaId).keys[(yyvsp[0].listaId).sig] = insertSymbolVar((yyvsp[-2].cadena));
             (yyvsp[0].listaId).sig++;  
         }
         else{
@@ -1600,8 +1600,8 @@ yyreduce:
   case 42: /* lista_id: IDENTIFICADOR  */
 #line 196 "programa.y"
                     {
-        if(!existSymbol((yyvsp[0].cadena))){
-            (yyval.listaId).keys[0] = insertSymbol((yyvsp[0].cadena));
+        if(!existSymbolVarConst((yyvsp[0].cadena))){
+            (yyval.listaId).keys[0] = insertSymbolVar((yyvsp[0].cadena));
             (yyval.listaId).sig = 1;
         }
         else{
@@ -1616,8 +1616,8 @@ yyreduce:
   case 43: /* lista_id: IDENTIFICADOR_BOOLEANO  */
 #line 207 "programa.y"
                              {
-        if(!existSymbol((yyvsp[0].cadena))){
-            (yyval.listaId).keys[0] = insertSymbol((yyvsp[0].cadena));
+        if(!existSymbolVarConst((yyvsp[0].cadena))){
+            (yyval.listaId).keys[0] = insertSymbolVar((yyvsp[0].cadena));
             (yyval.listaId).sig = 1;
         }
         else{
@@ -1865,8 +1865,8 @@ yyreduce:
   case 65: /* operando: IDENTIFICADOR  */
 #line 366 "programa.y"
                   {
-        (yyval.expresion).type = get_Symbol_Type((yyvsp[0].cadena));
-        (yyval.expresion).place = get_Symbol_Key((yyvsp[0].cadena));
+        (yyval.expresion).type = get_SymbolVarConst_Type((yyvsp[0].cadena));
+        (yyval.expresion).place = get_SymbolVarConst_Key((yyvsp[0].cadena));
     }
 #line 1872 "programa.tab.c"
     break;
@@ -1892,8 +1892,8 @@ yyreduce:
   case 69: /* operando_b: IDENTIFICADOR_BOOLEANO  */
 #line 376 "programa.y"
                            {
-        (yyval.expresion).type = get_Symbol_Type((yyvsp[0].cadena));
-        (yyval.expresion).place = get_Symbol_Key((yyvsp[0].cadena));
+        (yyval.expresion).type = get_SymbolVarConst_Type((yyvsp[0].cadena));
+        (yyval.expresion).place = get_SymbolVarConst_Key((yyvsp[0].cadena));
     }
 #line 1899 "programa.tab.c"
     break;

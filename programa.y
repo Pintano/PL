@@ -19,12 +19,11 @@
     float real;
     char* cadena;
     enum type type;
-    char caracter;
     TipoM param;
-    
 }
 
 /* Declaración de tokens que vienen del scanner (Flex) */
+%token LITERAL_CARACTER
 %token ASIGNACION  
 %token DELIMITADOR SEPARADOR COMIENZO_ALGORITMO FIN_ALGORITMO
 %token COMIENZO_PARENTESIS FIN_PARENTESIS
@@ -49,8 +48,6 @@
 %token <real> LITERAL_REAL
 %token <cadena> LITERAL_CADENA IDENTIFICADOR_BOOLEANO IDENTIFICADOR 
 %token <entero> LITERAL_ENTERO OPERADORES_MULTIPLICACION 
-%token <caracter> LITERAL_CARACTER
-
 OPERADORES_SUMA LITERAL_BOOLEANO IGUAL COMPARADORES 
 TIPO ENTRADA_SALIDA OPERADORES_BOOLEANOS
 
@@ -60,7 +57,6 @@ TIPO ENTRADA_SALIDA OPERADORES_BOOLEANOS
 %type <expresion_bool> exp_b 
 %type <expresion> exp_a operando operando_b asignacion literal_numerico expresion
 %type <param> m
-%type <SymbolValue> literal 
 
 %left REFERENCIA PUNTERO COMIENZO_INDICE
 %left COMPARADORES IGUAL
@@ -150,40 +146,16 @@ lista_campos:
     ;
 
 lista_d_cte:
-    IDENTIFICADOR IGUAL literal DELIMITADOR lista_d_cte {
-        /*SymbolValue value = $3; 
-        if (!existSymbolVarConst($1)) {
-            insertSymbolConst($1, value);
-        } else {
-            yyerror("Constante ya definida.");
-        }*/
-    }
+    IDENTIFICADOR IGUAL literal DELIMITADOR lista_d_cte {}
     | /*vacio*/ {}
     ;
 
 literal: 
-    LITERAL_BOOLEANO {
-    }
-    | LITERAL_CADENA {
-        /*SymbolValue value = initializeSymbolValue();
-        strncpy(value.cadena, $1, sizeof(value.cadena));
-        $$ = value;*/
-    }
-    | LITERAL_CARACTER {
-        /*SymbolValue value = initializeSymbolValue();
-        value.caracter = $1;
-        $$ = value;*/
-    }
-    | LITERAL_ENTERO {
-        /*SymbolValue value = initializeSymbolValue();
-        value.entero = $1;
-        $$ = value;*/
-    }
-    | LITERAL_REAL {
-        /*SymbolValue value = initializeSymbolValue();
-        value.real = $1;
-        $$ = value;*/
-    }
+    LITERAL_BOOLEANO {}
+    | LITERAL_CADENA {}
+    | LITERAL_CARACTER {}
+    | LITERAL_ENTERO {}
+    | LITERAL_REAL {}
     ;
 
 
@@ -304,6 +276,7 @@ exp_a :
             }
 
         }
+
     }
     | COMIENZO_PARENTESIS exp_a FIN_PARENTESIS {
         $$ = $2;
@@ -312,7 +285,6 @@ exp_a :
         $$ = $1;
     }
     | literal_numerico {
-        changeSymbol($1.place, $1.type);
         $$ = $1;
     }
     | OPERADORES_SUMA exp_a {
@@ -331,18 +303,9 @@ exp_a :
     ;
 
 literal_numerico:
-    LITERAL_ENTERO { 
-        SymbolValue val = initializeSymbolValue();
-        val.entero = $1;  
-        $$.type = ENUM_ENTERO;
-        $$.place = insertSymbolLit(val);
+    LITERAL_ENTERO {
     }
-    | LITERAL_REAL {
-        SymbolValue val = initializeSymbolValue();
-        val.real = $1;  
-        $$.type = ENUM_REAL;
-        $$.place = insertSymbolLit(val);
-     }
+    | LITERAL_REAL {}
     ;
 
 exp_b:

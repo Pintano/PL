@@ -60,6 +60,7 @@ typedef struct table{
 }TABLE;
 
 
+
 extern TABLE symbol_table;
 // Symbol new_Symbol(char name[100]);
 void emptyTable();

@@ -162,6 +162,7 @@ int get_SymbolLit_Type(SymbolValue value) {
     return -1;
 }
 
+
 Symbol new_SymbolVar(char name[100]) { //supuestamente yasta
     Symbol newSymb;
 
