@@ -19,11 +19,12 @@
     float real;
     char* cadena;
     enum type type;
+    char caracter;
     TipoM param;
+    
 }
 
 /* Declaración de tokens que vienen del scanner (Flex) */
-%token LITERAL_CARACTER
 %token ASIGNACION  
 %token DELIMITADOR SEPARADOR COMIENZO_ALGORITMO FIN_ALGORITMO
 %token COMIENZO_PARENTESIS FIN_PARENTESIS
@@ -48,6 +49,8 @@
 %token <real> LITERAL_REAL
 %token <cadena> LITERAL_CADENA IDENTIFICADOR_BOOLEANO IDENTIFICADOR 
 %token <entero> LITERAL_ENTERO OPERADORES_MULTIPLICACION 
+%token <caracter> LITERAL_CARACTER
+
 OPERADORES_SUMA LITERAL_BOOLEANO IGUAL COMPARADORES 
 TIPO ENTRADA_SALIDA OPERADORES_BOOLEANOS
 
@@ -57,6 +60,7 @@ TIPO ENTRADA_SALIDA OPERADORES_BOOLEANOS
 %type <expresion_bool> exp_b 
 %type <expresion> exp_a operando operando_b asignacion literal_numerico expresion
 %type <param> m
+%type <SymbolValue> literal 
 
 %left REFERENCIA PUNTERO COMIENZO_INDICE
 %left COMPARADORES IGUAL
@@ -146,16 +150,40 @@ lista_campos:
     ;
 
 lista_d_cte:
-    IDENTIFICADOR IGUAL literal DELIMITADOR lista_d_cte {}
+    IDENTIFICADOR IGUAL literal DELIMITADOR lista_d_cte {
+        /*SymbolValue value = $3; 
+        if (!existSymbolVarConst($1)) {
+            insertSymbolConst($1, value);
+        } else {
+            yyerror("Constante ya definida.");
+        }*/
+    }
     | /*vacio*/ {}
     ;
 
 literal: 
-    LITERAL_BOOLEANO {}
-    | LITERAL_CADENA {}
-    | LITERAL_CARACTER {}
-    | LITERAL_ENTERO {}
-    | LITERAL_REAL {}
+    LITERAL_BOOLEANO {
+    }
+    | LITERAL_CADENA {
+        /*SymbolValue value = initializeSymbolValue();
+        strncpy(value.cadena, $1, sizeof(value.cadena));
+        $$ = value;*/
+    }
+    | LITERAL_CARACTER {
+        /*SymbolValue value = initializeSymbolValue();
+        value.caracter = $1;
+        $$ = value;*/
+    }
+    | LITERAL_ENTERO {
+        /*SymbolValue value = initializeSymbolValue();
+        value.entero = $1;
+        $$ = value;*/
+    }
+    | LITERAL_REAL {
+        /*SymbolValue value = initializeSymbolValue();
+        value.real = $1;
+        $$ = value;*/
+    }
     ;
 
 
@@ -174,8 +202,8 @@ lista_d_var :
 
 lista_id:
     IDENTIFICADOR SEPARADOR lista_id {
-        if(!existSymbol($1)){
-            $3.keys[$3.sig] = insertSymbol($1);
+        if(!existSymbolVarConst($1)){
+            $3.keys[$3.sig] = insertSymbolVar($1);
             $3.sig++;
         }
         else{
@@ -184,8 +212,8 @@ lista_id:
         $$ = $3;
     }
     | IDENTIFICADOR_BOOLEANO SEPARADOR lista_id {
-        if(!existSymbol($1)){
-            $3.keys[$3.sig] = insertSymbol($1);
+        if(!existSymbolVarConst($1)){
+            $3.keys[$3.sig] = insertSymbolVar($1);
             $3.sig++;  
         }
         else{
@@ -194,8 +222,8 @@ lista_id:
         $$ = $3;
     }
     | IDENTIFICADOR {
-        if(!existSymbol($1)){
-            $$.keys[0] = insertSymbol($1);
+        if(!existSymbolVarConst($1)){
+            $$.keys[0] = insertSymbolVar($1);
             $$.sig = 1;
         }
         else{
@@ -205,8 +233,8 @@ lista_id:
         
     }
     | IDENTIFICADOR_BOOLEANO {
-        if(!existSymbol($1)){
-            $$.keys[0] = insertSymbol($1);
+        if(!existSymbolVarConst($1)){
+            $$.keys[0] = insertSymbolVar($1);
             $$.sig = 1;
         }
         else{
@@ -276,7 +304,6 @@ exp_a :
             }
 
         }
-
     }
     | COMIENZO_PARENTESIS exp_a FIN_PARENTESIS {
         $$ = $2;
@@ -285,6 +312,7 @@ exp_a :
         $$ = $1;
     }
     | literal_numerico {
+        changeSymbol($1.place, $1.type);
         $$ = $1;
     }
     | OPERADORES_SUMA exp_a {
@@ -303,9 +331,18 @@ exp_a :
     ;
 
 literal_numerico:
-    LITERAL_ENTERO {
+    LITERAL_ENTERO { 
+        SymbolValue val = initializeSymbolValue();
+        val.entero = $1;  
+        $$.type = ENUM_ENTERO;
+        $$.place = insertSymbolLit(val);
     }
-    | LITERAL_REAL {}
+    | LITERAL_REAL {
+        SymbolValue val = initializeSymbolValue();
+        val.real = $1;  
+        $$.type = ENUM_REAL;
+        $$.place = insertSymbolLit(val);
+     }
     ;
 
 exp_b:
@@ -364,8 +401,8 @@ m: /*vacio*/ {
 
 operando:
     IDENTIFICADOR {
-        $$.type = get_Symbol_Type($1);
-        $$.place = get_Symbol_Key($1);
+        $$.type = get_SymbolVarConst_Type($1);
+        $$.place = get_SymbolVarConst_Key($1);
     }
     | operando PUNTERO operando {}
     | operando COMIENZO_INDICE expresion FIN_INDICE {}
@@ -374,8 +411,8 @@ operando:
 
 operando_b:
     IDENTIFICADOR_BOOLEANO {
-        $$.type = get_Symbol_Type($1);
-        $$.place = get_Symbol_Key($1);
+        $$.type = get_SymbolVarConst_Type($1);
+        $$.place = get_SymbolVarConst_Key($1);
     }
     ;
 
