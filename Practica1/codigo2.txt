@@ -1,0 +1,9 @@
+ accion avance(e/s c: ColaDeElem);
+ var
+ fvar
+ i: entero;
+ c.f := c.f-1;
+ para i := c.f hasta 1 hacer
+ c.a[i] := c.a[i+1]
+ fpara
+ faccion
