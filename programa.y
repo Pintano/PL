@@ -174,8 +174,8 @@ lista_d_var :
 
 lista_id:
     IDENTIFICADOR SEPARADOR lista_id {
-        if(!existSymbol($1)){
-            $3.keys[$3.sig] = insertSymbol($1);
+        if(!existSymbolVarConst($1)){
+            $3.keys[$3.sig] = insertSymbolVar($1);
             $3.sig++;
         }
         else{
@@ -184,8 +184,8 @@ lista_id:
         $$ = $3;
     }
     | IDENTIFICADOR_BOOLEANO SEPARADOR lista_id {
-        if(!existSymbol($1)){
-            $3.keys[$3.sig] = insertSymbol($1);
+        if(!existSymbolVarConst($1)){
+            $3.keys[$3.sig] = insertSymbolVar($1);
             $3.sig++;  
         }
         else{
@@ -194,8 +194,8 @@ lista_id:
         $$ = $3;
     }
     | IDENTIFICADOR {
-        if(!existSymbol($1)){
-            $$.keys[0] = insertSymbol($1);
+        if(!existSymbolVarConst($1)){
+            $$.keys[0] = insertSymbolVar($1);
             $$.sig = 1;
         }
         else{
@@ -205,8 +205,8 @@ lista_id:
         
     }
     | IDENTIFICADOR_BOOLEANO {
-        if(!existSymbol($1)){
-            $$.keys[0] = insertSymbol($1);
+        if(!existSymbolVarConst($1)){
+            $$.keys[0] = insertSymbolVar($1);
             $$.sig = 1;
         }
         else{
@@ -364,8 +364,8 @@ m: /*vacio*/ {
 
 operando:
     IDENTIFICADOR {
-        $$.type = get_Symbol_Type($1);
-        $$.place = get_Symbol_Key($1);
+        $$.type = get_SymbolVarConst_Type($1);
+        $$.place = get_SymbolVarConst_Key($1);
     }
     | operando PUNTERO operando {}
     | operando COMIENZO_INDICE expresion FIN_INDICE {}
@@ -374,8 +374,8 @@ operando:
 
 operando_b:
     IDENTIFICADOR_BOOLEANO {
-        $$.type = get_Symbol_Type($1);
-        $$.place = get_Symbol_Key($1);
+        $$.type = get_SymbolVarConst_Type($1);
+        $$.place = get_SymbolVarConst_Key($1);
     }
     ;
 
