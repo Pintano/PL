@@ -1,0 +1,13 @@
+COMO EJECUTAR
+
+flex scanner.l
+gcc lex.yy.c -o scanner -lfl
+./scanner
+
+
+LITERAL_ENTERO                  (\+|\-)?{CIFRA}+([eE](\+|\-)?{CIFRA}+)?
+
+
+
+PRECONDICION                    \{(?i:prec)([^}\/]|\/.)*\}
+POSTCONDICION                    \{(?i:post)([^}\/]|\/.)*\}

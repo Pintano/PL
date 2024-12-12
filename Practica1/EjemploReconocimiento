@@ -1,0 +1,51 @@
+{Ejemplo de lo que reconoce nuestro scanner}
+'Enteros y decimales'
+1e1
+1e-1
+-1e10
+1.1
+1.00000001
+'Simbolos'
+:=
+:
+=
+;
+->
++
+*
+..
+'Tipos'
+entero
+real
+caracter
+'Estructuras'
+accion
+ACCION
+AcCiOn
+fsi
+[]
+var
+fvar
+'Ejemplos de pseudocódigo'
+algoritmo intercambio;
+ent a, b: entero;
+sal a, b: entero;
+{Prec: a = A AND b = B}
+var
+aux: entero;
+fvar
+aux:= a;
+a:= b;
+b:= aux
+{Post: b=A AND a = B}
+falgoritmo
+
+accion avance(e/s c: ColaDeElem);
+var
+fvar
+i: entero;
+c.f := c.f - 1;
+para i := c.f hasta 1 hacer
+c.a[i] := c.a[i + 1]
+fpara
+faccion

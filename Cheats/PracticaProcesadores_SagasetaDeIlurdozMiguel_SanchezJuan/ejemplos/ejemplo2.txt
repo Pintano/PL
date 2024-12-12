@@ -1,0 +1,21 @@
+algoritmo orden3;
+ent a, ab, c: entero; sal max, min, med: entero; {Prec: a = A AND ab = B AND c = C}
+si a >= ab AND a >= c ->
+max := a;
+si ab >= c ->med := ab; min := c
+[] ab <c ->med := c; min := ab
+fsi
+[] ab >= a AND ab >= c ->
+max := ab;
+si a >= c ->med := a; min := c
+[] a <c ->med := c; min := a
+fsi
+[] c >= ab AND c >= a ->
+max := c;
+si ab >= a ->med := ab; min := a
+[] ab <a ->med := a; min := ab
+fsi
+fsi;
+a := a
+{Post: a=A AND ab = B AND c= C ...}
+falgoritmo.
